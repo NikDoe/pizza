@@ -4,10 +4,6 @@ export default function Categories() {
 	const [activeCategory, setActiveCategory] = useState(0);
 
 	const categories = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые'];
-
-	const addActiveClass = index => {
-		setActiveCategory(index);
-	};
 	return (
 		<div className="categories">
 			<ul>
@@ -15,7 +11,7 @@ export default function Categories() {
 					<li
 						key={index}
 						onClick={() => {
-							addActiveClass(index);
+							setActiveCategory(index);
 						}}
 						className={activeCategory === index ? 'active' : ''}
 					>
