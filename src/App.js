@@ -4,14 +4,19 @@ import Categories from './components/Categories';
 import Sort from './components/Sort';
 import PizzaBlock from './components/PizzaBlock';
 import { useEffect, useState } from 'react';
+import { Skeleton } from './components/PizzaBlock/Skeleton';
 
 function App() {
 	const [pizzas, setPizzas] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
 		fetch('http://localhost:9000/api/pizza')
 			.then(res => res.json())
-			.then(arr => setPizzas(arr));
+			.then(arr => {
+				setPizzas(arr);
+				setIsLoading(false);
+			});
 	}, []);
 
 	return (
@@ -25,9 +30,9 @@ function App() {
 					</div>
 					<h2 className="content__title">Все пиццы</h2>
 					<div className="content__items">
-						{pizzas.map((obj, index) => (
-							<PizzaBlock key={index} {...obj} />
-						))}
+						{isLoading
+							? [...Array(6)].map((_, index) => <Skeleton key={index} />)
+							: pizzas.map((obj, index) => <PizzaBlock key={index} {...obj} />)}
 					</div>
 				</div>
 			</div>
