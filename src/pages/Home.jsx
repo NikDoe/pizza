@@ -7,21 +7,28 @@ import { useEffect, useState } from 'react';
 export default function Home() {
 	const [pizzas, setPizzas] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
+	const [activeCategory, setActiveCategory] = useState(0);
 
 	useEffect(() => {
-		fetch('http://localhost:9000/api/pizza')
+		setIsLoading(true);
+		fetch(
+			`http://localhost:9000/api/pizza?${activeCategory ? 'category=' + activeCategory : ''}`,
+		)
 			.then(res => res.json())
 			.then(arr => {
 				setPizzas(arr);
 				setIsLoading(false);
 			});
 		window.scrollTo(0, 0);
-	}, []);
+	}, [activeCategory]);
 
 	return (
 		<>
 			<div className="content__top">
-				<Categories />
+				<Categories
+					category={activeCategory}
+					setActiveCategory={index => setActiveCategory(index)}
+				/>
 				<Sort />
 			</div>
 			<h2 className="content__title">Все пиццы</h2>
