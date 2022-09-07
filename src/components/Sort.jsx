@@ -11,8 +11,8 @@ export default function Sort({ activeSort, setActiveSort }) {
 		{ name: 'алфавиту (я-а)', sortBy: 'DESCtitle' },
 	];
 
-	const selectTypeSort = index => {
-		setActiveSort(index);
+	const selectTypeSort = object => {
+		setActiveSort(object);
 		setOpen(false);
 	};
 
