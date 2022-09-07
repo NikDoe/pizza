@@ -4,7 +4,7 @@ import { Skeleton } from '../components/PizzaBlock/Skeleton';
 import PizzaBlock from '../components/PizzaBlock';
 import { useEffect, useState } from 'react';
 
-export default function Home() {
+export default function Home({ searchQuery }) {
 	const [pizzas, setPizzas] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [activeCategory, setActiveCategory] = useState(0);
@@ -16,15 +16,18 @@ export default function Home() {
 		const category = activeCategory ? 'category=' + activeCategory : '';
 		const sortBy = activeSort.sortBy.replace('DESC', '');
 		const order = activeSort.sortBy.includes('DESC') ? 'DESC' : 'ASC';
+		const search = searchQuery.toLowerCase();
 
-		fetch(`http://localhost:9000/api/pizza?${category}&sortBy=${sortBy}&order=${order}`)
+		fetch(
+			`http://localhost:9000/api/pizza?${category}&sortBy=${sortBy}&order=${order}&search=${search}`,
+		)
 			.then(res => res.json())
 			.then(arr => {
 				setPizzas(arr);
 				setIsLoading(false);
 			});
 		window.scrollTo(0, 0);
-	}, [activeCategory, activeSort]);
+	}, [activeCategory, activeSort, searchQuery]);
 
 	return (
 		<>
