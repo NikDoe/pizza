@@ -16,10 +16,10 @@ export default function Home({ searchQuery }) {
 		const category = activeCategory ? 'category=' + activeCategory : '';
 		const sortBy = activeSort.sortBy.replace('DESC', '');
 		const order = activeSort.sortBy.includes('DESC') ? 'DESC' : 'ASC';
-		const search = searchQuery.toLowerCase();
+		const search = searchQuery ? `search=${searchQuery}` : '';
 
 		fetch(
-			`http://localhost:9000/api/pizza?${category}&sortBy=${sortBy}&order=${order}&search=${search}`,
+			`http://localhost:9000/api/pizza?${category}&sortBy=${sortBy}&order=${order}&${search}`,
 		)
 			.then(res => res.json())
 			.then(arr => {
