@@ -3,12 +3,15 @@ import Sort from '../components/Sort';
 import { Skeleton } from '../components/PizzaBlock/Skeleton';
 import PizzaBlock from '../components/PizzaBlock';
 import { useEffect, useState } from 'react';
+import Pagination from '../components/Pagination';
 
 export default function Home({ searchQuery }) {
 	const [pizzas, setPizzas] = useState([]);
+	const [pizzasCount, setPizzasCount] = useState(0);
 	const [isLoading, setIsLoading] = useState(true);
 	const [activeCategory, setActiveCategory] = useState(0);
 	const [activeSort, setActiveSort] = useState({ name: 'популярности (0-10)', sortBy: 'rating' });
+	const [activePage, setActivePage] = useState(0);
 
 	useEffect(() => {
 		setIsLoading(true);
@@ -19,15 +22,19 @@ export default function Home({ searchQuery }) {
 		const search = searchQuery ? `search=${searchQuery}` : '';
 
 		fetch(
-			`http://localhost:9000/api/pizza?${category}&sortBy=${sortBy}&order=${order}&${search}`,
+			`http://localhost:9000/api/pizza?page=${
+				activePage + 1
+			}&${category}&sortBy=${sortBy}&order=${order}&${search}`,
 		)
 			.then(res => res.json())
 			.then(arr => {
-				setPizzas(arr);
+				const [allPizzas, count] = arr;
+				setPizzas(allPizzas);
+				setPizzasCount(count);
 				setIsLoading(false);
 			});
 		window.scrollTo(0, 0);
-	}, [activeCategory, activeSort, searchQuery]);
+	}, [activeCategory, activeSort, searchQuery, activePage]);
 
 	return (
 		<>
@@ -44,6 +51,11 @@ export default function Home({ searchQuery }) {
 					? [...Array(6)].map((_, index) => <Skeleton key={index} />)
 					: pizzas.map((obj, index) => <PizzaBlock key={index} {...obj} />)}
 			</div>
+			<Pagination
+				pizzasCount={pizzasCount}
+				activePage={activePage}
+				setActivePage={index => setActivePage(index)}
+			/>
 		</>
 	);
 }

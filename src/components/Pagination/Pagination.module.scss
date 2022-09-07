@@ -1,0 +1,45 @@
+.root {
+  display: flex;
+
+  @media (max-width: 750px) {
+    justify-content: center;
+  }
+  ul {
+    display: flex;
+    margin: 0 10px;
+  }
+  li, .button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    border: 1px solid #fe5f1e;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #fe5f1e;
+      color: #ffffff;
+    }
+  }
+  li {
+    margin-right: 10px;
+    width: 40px;
+    border-radius: 50%;
+  }
+
+  li:last-child {
+    margin-right: 0;
+  }
+
+  .active {
+    background-color: #fe5f1e;
+    color: #ffffff;
+  }
+
+  .button {
+    background-color: #ffffff;
+    padding: 0 10px;
+    border-radius: 20px;
+  }
+}
