@@ -18,6 +18,8 @@ export default function Home() {
 
 	const { searchQuery } = useContext(SearchContext);
 
+	const categories = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые'];
+
 	const limit = 4;
 	const pagesCount = Math.ceil(pizzasCount / limit);
 
@@ -50,10 +52,13 @@ export default function Home() {
 				<Categories
 					category={activeCategory}
 					setActiveCategory={index => setActiveCategory(index)}
+					allCategories={categories}
 				/>
 				<Sort activeSort={activeSort} setActiveSort={sortBy => setActiveSort(sortBy)} />
 			</div>
-			<h2 className="content__title">Все пиццы</h2>
+			<h2 className="content__title">
+				{activeCategory ? categories[activeCategory] : 'Все пиццы'}
+			</h2>
 			<div className="content__items">
 				{isLoading
 					? [...Array(6)].map((_, index) => <Skeleton key={index} />)

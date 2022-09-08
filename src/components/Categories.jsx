@@ -1,9 +1,8 @@
-export default function Categories({ category, setActiveCategory }) {
-	const categories = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые'];
+export default function Categories({ category, setActiveCategory, allCategories }) {
 	return (
 		<div className="categories">
 			<ul>
-				{categories.map((value, index) => (
+				{allCategories.map((value, index) => (
 					<li
 						key={index}
 						onClick={() => {
