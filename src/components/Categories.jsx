@@ -1,4 +1,10 @@
-export default function Categories({ category, setActiveCategory, allCategories }) {
+import { useDispatch, useSelector } from 'react-redux';
+import { setActiveCategory } from '../store/slices/filterSlice';
+
+export default function Categories({ allCategories }) {
+	const activeCategory = useSelector(state => state.filter.categoryIndex);
+	const dispatch = useDispatch();
+
 	return (
 		<div className="categories">
 			<ul>
@@ -6,9 +12,9 @@ export default function Categories({ category, setActiveCategory, allCategories 
 					<li
 						key={index}
 						onClick={() => {
-							setActiveCategory(index);
+							dispatch(setActiveCategory(index));
 						}}
-						className={category === index ? 'active' : ''}
+						className={activeCategory === index ? 'active' : ''}
 					>
 						{value}
 					</li>

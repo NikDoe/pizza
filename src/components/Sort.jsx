@@ -1,6 +1,10 @@
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setActiveSort } from '../store/slices/sortSlice';
 
-export default function Sort({ activeSort, setActiveSort }) {
+export default function Sort() {
+	const activeSort = useSelector(state => state.sort.activeSort);
+	const dispatch = useDispatch();
 	const [open, setOpen] = useState(false);
 	const sortList = [
 		{ name: 'популярности (0-10)', sortBy: 'rating' },
@@ -12,7 +16,7 @@ export default function Sort({ activeSort, setActiveSort }) {
 	];
 
 	const selectTypeSort = object => {
-		setActiveSort(object);
+		dispatch(setActiveSort(object));
 		setOpen(false);
 	};
 

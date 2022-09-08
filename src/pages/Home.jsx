@@ -5,15 +5,16 @@ import PizzaBlock from '../components/PizzaBlock';
 import { createContext, useContext, useEffect, useState } from 'react';
 import Pagination from '../components/Pagination';
 import { SearchContext } from '../App';
+import { useSelector } from 'react-redux';
 
 export const PaginationContext = createContext({});
 
 export default function Home() {
+	const activeCategory = useSelector(state => state.filter.categoryIndex);
+	const activeSort = useSelector(state => state.sort.activeSort);
 	const [pizzas, setPizzas] = useState([]);
 	const [pizzasCount, setPizzasCount] = useState(0);
 	const [isLoading, setIsLoading] = useState(true);
-	const [activeCategory, setActiveCategory] = useState(0);
-	const [activeSort, setActiveSort] = useState({ name: 'популярности (0-10)', sortBy: 'rating' });
 	const [activePage, setActivePage] = useState(0);
 
 	const { searchQuery } = useContext(SearchContext);
@@ -49,12 +50,8 @@ export default function Home() {
 	return (
 		<>
 			<div className="content__top">
-				<Categories
-					category={activeCategory}
-					setActiveCategory={index => setActiveCategory(index)}
-					allCategories={categories}
-				/>
-				<Sort activeSort={activeSort} setActiveSort={sortBy => setActiveSort(sortBy)} />
+				<Categories allCategories={categories} />
+				<Sort />
 			</div>
 			<h2 className="content__title">
 				{activeCategory ? categories[activeCategory] : 'Все пиццы'}
