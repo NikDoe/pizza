@@ -6,6 +6,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import Pagination from '../components/Pagination';
 import { SearchContext } from '../App';
 import { useSelector } from 'react-redux';
+import axios from 'axios';
 
 export const PaginationContext = createContext({});
 
@@ -32,14 +33,14 @@ export default function Home() {
 		const order = activeSort.sortBy.includes('DESC') ? 'DESC' : 'ASC';
 		const search = searchQuery ? `search=${searchQuery}` : '';
 
-		fetch(
-			`http://localhost:9000/api/pizza?page=${
-				activePage + 1
-			}&${category}&sortBy=${sortBy}&order=${order}&${search}`,
-		)
-			.then(res => res.json())
-			.then(arr => {
-				const [allPizzas, count] = arr;
+		axios
+			.get(
+				`http://localhost:9000/api/pizza?page=${
+					activePage + 1
+				}&${category}&sortBy=${sortBy}&order=${order}&${search}`,
+			)
+			.then(res => {
+				const [allPizzas, count] = res.data;
 				setPizzas(allPizzas);
 				setPizzasCount(count);
 				setIsLoading(false);
