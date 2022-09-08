@@ -2,7 +2,7 @@ import logoPizza from '../assets/img/pizza-logo.svg';
 import { Link } from 'react-router-dom';
 import Search from './Search';
 
-export default function Header({ searchQuery, setSearchQuery }) {
+export default function Header() {
 	return (
 		<div className="header">
 			<div className="container">
@@ -15,7 +15,7 @@ export default function Header({ searchQuery, setSearchQuery }) {
 						</div>
 					</div>
 				</Link>
-				<Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+				<Search />
 				<div className="header__cart">
 					<Link to="/cart" className="button button--cart">
 						<span>520 ₽</span>

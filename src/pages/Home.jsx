@@ -2,16 +2,24 @@ import Categories from '../components/Categories';
 import Sort from '../components/Sort';
 import { Skeleton } from '../components/PizzaBlock/Skeleton';
 import PizzaBlock from '../components/PizzaBlock';
-import { useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import Pagination from '../components/Pagination';
+import { SearchContext } from '../App';
 
-export default function Home({ searchQuery }) {
+export const PaginationContext = createContext();
+
+export default function Home() {
 	const [pizzas, setPizzas] = useState([]);
 	const [pizzasCount, setPizzasCount] = useState(0);
 	const [isLoading, setIsLoading] = useState(true);
 	const [activeCategory, setActiveCategory] = useState(0);
 	const [activeSort, setActiveSort] = useState({ name: 'популярности (0-10)', sortBy: 'rating' });
 	const [activePage, setActivePage] = useState(0);
+
+	const { searchQuery } = useContext(SearchContext);
+
+	const limit = 4;
+	const pagesCount = Math.ceil(pizzasCount / limit);
 
 	useEffect(() => {
 		setIsLoading(true);
@@ -51,11 +59,11 @@ export default function Home({ searchQuery }) {
 					? [...Array(6)].map((_, index) => <Skeleton key={index} />)
 					: pizzas.map((obj, index) => <PizzaBlock key={index} {...obj} />)}
 			</div>
-			<Pagination
-				pizzasCount={pizzasCount}
-				activePage={activePage}
-				setActivePage={index => setActivePage(index)}
-			/>
+			<PaginationContext.Provider
+				value={{ pizzasCount, pagesCount, activePage, setActivePage }}
+			>
+				<Pagination />
+			</PaginationContext.Provider>
 		</>
 	);
 }
