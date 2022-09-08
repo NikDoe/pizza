@@ -6,17 +6,13 @@ import { useContext } from 'react';
 import { PaginationContext } from '../../pages/Home';
 
 export default function Pagination() {
-	const { pizzasCount, pagesCount, activePage } = useContext(PaginationContext);
+	const { pagesCount, activePage } = useContext(PaginationContext);
 
 	return (
 		<div className={styles.root}>
-			{activePage && pizzasCount !== 0 ? <PrevButton styles={styles} /> : ''}
+			{pagesCount > 1 && activePage ? <PrevButton styles={styles} /> : ''}
 			{pagesCount > 1 ? <PagesList styles={styles} /> : ''}
-			{activePage === pagesCount - 1 || pizzasCount === 0 ? (
-				''
-			) : (
-				<NextButton styles={styles} />
-			)}
+			{pagesCount > 1 && activePage !== pagesCount - 1 ? <NextButton styles={styles} /> : ''}
 		</div>
 	);
 }

@@ -6,7 +6,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import Pagination from '../components/Pagination';
 import { SearchContext } from '../App';
 
-export const PaginationContext = createContext();
+export const PaginationContext = createContext({});
 
 export default function Home() {
 	const [pizzas, setPizzas] = useState([]);
