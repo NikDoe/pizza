@@ -2,9 +2,8 @@ import Categories from '../components/Categories';
 import Sort from '../components/Sort';
 import { Skeleton } from '../components/PizzaBlock/Skeleton';
 import PizzaBlock from '../components/PizzaBlock';
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import Pagination from '../components/Pagination';
-import { SearchContext } from '../App';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 
@@ -18,7 +17,7 @@ export default function Home() {
 	const [isLoading, setIsLoading] = useState(true);
 	const [activePage, setActivePage] = useState(0);
 
-	const { searchQuery } = useContext(SearchContext);
+	const searchQuery = useSelector(state => state.search.inputValue);
 
 	const categories = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые'];
 
