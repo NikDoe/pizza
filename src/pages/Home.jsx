@@ -17,7 +17,7 @@ export default function Home() {
 	const [isLoading, setIsLoading] = useState(true);
 	const [activePage, setActivePage] = useState(0);
 
-	const searchQuery = useSelector(state => state.search.inputValue);
+	const searchQuery = useSelector(state => state.search.inputSearchValue);
 
 	const categories = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые'];
 
