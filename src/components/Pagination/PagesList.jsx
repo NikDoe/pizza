@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { setActivePage } from '../../store/slices/paginationSlice';
+import { setActivePage } from '../../store/slices/querySlice';
 
 export default function PagesList({ styles }) {
-	const { activePage, pagesCount } = useSelector(state => state.pagination);
+	const { activePage, pagesCount } = useSelector(state => state.query);
 	const dispatch = useDispatch();
 
 	const activePageHandler = index => {

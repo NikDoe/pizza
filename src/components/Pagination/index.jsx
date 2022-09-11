@@ -5,7 +5,7 @@ import NextButton from './NextButton';
 import { useSelector } from 'react-redux';
 
 export default function Pagination() {
-	const { activePage, pagesCount } = useSelector(state => state.pagination);
+	const { activePage, pagesCount } = useSelector(state => state.query);
 
 	return (
 		<div className={styles.root}>

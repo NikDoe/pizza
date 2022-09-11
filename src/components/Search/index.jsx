@@ -2,12 +2,12 @@ import styles from './Search.module.scss';
 import searchIcon from '../../assets/img/search-icon.svg';
 import clearIcon from '../../assets/img/clear.svg';
 import { useDispatch, useSelector } from 'react-redux';
-import { setSearchQuery, setValue } from '../../store/slices/searchSlice';
+import { setSearchQuery, setValue } from '../../store/slices/querySlice';
 import { useMemo, useRef } from 'react';
 import debounce from 'lodash.debounce';
 
 export default function Search() {
-	const value = useSelector(state => state.search.inputValue);
+	const { inputValue } = useSelector(state => state.query);
 	const dispatch = useDispatch();
 
 	const searchInput = useRef(null);
@@ -34,11 +34,11 @@ export default function Search() {
 			<input
 				ref={searchInput}
 				className={styles.search}
-				value={value}
+				value={inputValue}
 				onChange={inputChangeHandler}
 				placeholder="поиск пиццы..."
 			/>
-			{value && (
+			{inputValue && (
 				<img
 					onClick={() => clearAndFocusInput()}
 					className={styles.clear}

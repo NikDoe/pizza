@@ -5,29 +5,27 @@ import PizzaBlock from '../components/PizzaBlock';
 import { useEffect, useState } from 'react';
 import Pagination from '../components/Pagination';
 import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
 import { setPizzas } from '../store/slices/pizzasSlice';
-import { setPagesCount } from '../store/slices/paginationSlice';
+import { setPagesCount } from '../store/slices/querySlice';
+import axios from 'axios';
 
 export default function Home() {
-	const activeCategory = useSelector(state => state.filter.categoryIndex);
-	const { activeSort } = useSelector(state => state.sort);
-	const { activePage } = useSelector(state => state.pagination);
+	const { categoryIndex, activeSort, inputSearchValue, activePage } = useSelector(
+		state => state.query,
+	);
 	const { pizzas } = useSelector(state => state.pizzas);
 	const dispatch = useDispatch();
 	const [isLoading, setIsLoading] = useState(true);
-
-	const searchQuery = useSelector(state => state.search.inputSearchValue);
 
 	const categories = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые'];
 
 	useEffect(() => {
 		setIsLoading(true);
 
-		const category = activeCategory ? 'category=' + activeCategory : '';
+		const category = categoryIndex ? 'category=' + categoryIndex : '';
 		const sortBy = activeSort.sortBy.replace('DESC', '');
 		const order = activeSort.sortBy.includes('DESC') ? 'DESC' : 'ASC';
-		const search = searchQuery ? `search=${searchQuery}` : '';
+		const search = inputSearchValue ? `search=${inputSearchValue}` : '';
 
 		axios
 			.get(
@@ -41,8 +39,9 @@ export default function Home() {
 				dispatch(setPagesCount(count));
 				setIsLoading(false);
 			});
+
 		window.scrollTo(0, 0);
-	}, [activeCategory, activeSort, searchQuery, activePage, dispatch]);
+	}, [categoryIndex, activeSort, inputSearchValue, activePage, dispatch]);
 
 	return (
 		<>
@@ -51,7 +50,7 @@ export default function Home() {
 				<Sort />
 			</div>
 			<h2 className="content__title">
-				{activeCategory ? categories[activeCategory] : 'Все пиццы'}
+				{categoryIndex ? categories[categoryIndex] : 'Все пиццы'}
 			</h2>
 			<div className="content__items">
 				{isLoading

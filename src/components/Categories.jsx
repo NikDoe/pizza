@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { setActiveCategory } from '../store/slices/filterSlice';
+import { setActiveCategory } from '../store/slices/querySlice';
 
 export default function Categories({ allCategories }) {
-	const activeCategory = useSelector(state => state.filter.categoryIndex);
+	const activeCategory = useSelector(state => state.query.categoryIndex);
 	const dispatch = useDispatch();
 
 	return (

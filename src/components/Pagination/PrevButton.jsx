@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { setActivePage } from '../../store/slices/paginationSlice';
+import { setActivePage } from '../../store/slices/querySlice';
 
 export default function PrevButton({ styles }) {
-	const { activePage } = useSelector(state => state.pagination);
+	const { activePage } = useSelector(state => state.query);
 	const dispatch = useDispatch();
 
 	const activePageHandler = () => {

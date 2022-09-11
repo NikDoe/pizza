@@ -1,19 +1,20 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setActiveSort } from '../store/slices/sortSlice';
+import { setActiveSort } from '../store/slices/querySlice';
+
+export const sortList = [
+	{ name: 'популярности (0-10)', sortBy: 'rating' },
+	{ name: 'популярности (10-0)', sortBy: 'DESCrating' },
+	{ name: 'цене (возр.)', sortBy: 'price' },
+	{ name: 'цене (убыв.)', sortBy: 'DESCprice' },
+	{ name: 'алфавиту (а-я)', sortBy: 'title' },
+	{ name: 'алфавиту (я-а)', sortBy: 'DESCtitle' },
+];
 
 export default function Sort() {
-	const activeSort = useSelector(state => state.sort.activeSort);
+	const { activeSort } = useSelector(state => state.query);
 	const dispatch = useDispatch();
 	const [open, setOpen] = useState(false);
-	const sortList = [
-		{ name: 'популярности (0-10)', sortBy: 'rating' },
-		{ name: 'популярности (10-0)', sortBy: 'DESCrating' },
-		{ name: 'цене (возр.)', sortBy: 'price' },
-		{ name: 'цене (убыв.)', sortBy: 'DESCprice' },
-		{ name: 'алфавиту (а-я)', sortBy: 'title' },
-		{ name: 'алфавиту (я-а)', sortBy: 'DESCtitle' },
-	];
 
 	const selectTypeSort = object => {
 		dispatch(setActiveSort(object));
