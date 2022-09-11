@@ -2,11 +2,10 @@ import styles from './Pagination.module.scss';
 import PrevButton from './PrevButton';
 import PagesList from './PagesList';
 import NextButton from './NextButton';
-import { useContext } from 'react';
-import { PaginationContext } from '../../pages/Home';
+import { useSelector } from 'react-redux';
 
 export default function Pagination() {
-	const { pagesCount, activePage } = useContext(PaginationContext);
+	const { activePage, pagesCount } = useSelector(state => state.pagination);
 
 	return (
 		<div className={styles.root}>

@@ -1,8 +1,13 @@
-import { useContext } from 'react';
-import { PaginationContext } from '../../pages/Home';
+import { useDispatch, useSelector } from 'react-redux';
+import { setActivePage } from '../../store/slices/paginationSlice';
 
 export default function PagesList({ styles }) {
-	const { pagesCount, activePage, setActivePage } = useContext(PaginationContext);
+	const { activePage, pagesCount } = useSelector(state => state.pagination);
+	const dispatch = useDispatch();
+
+	const activePageHandler = index => {
+		dispatch(setActivePage(index));
+	};
 
 	const pages = [];
 	for (let i = 0; i < pagesCount; i++) {
@@ -14,9 +19,7 @@ export default function PagesList({ styles }) {
 			{pages.map((page, index) => (
 				<li
 					key={index}
-					onClick={() => {
-						setActivePage(index);
-					}}
+					onClick={() => activePageHandler(index)}
 					className={activePage === index ? styles.active : ''}
 				>
 					{page}

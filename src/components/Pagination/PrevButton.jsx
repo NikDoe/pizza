@@ -1,11 +1,16 @@
-import { useContext } from 'react';
-import { PaginationContext } from '../../pages/Home';
+import { useDispatch, useSelector } from 'react-redux';
+import { setActivePage } from '../../store/slices/paginationSlice';
 
 export default function PrevButton({ styles }) {
-	const { activePage, setActivePage } = useContext(PaginationContext);
+	const { activePage } = useSelector(state => state.pagination);
+	const dispatch = useDispatch();
+
+	const activePageHandler = () => {
+		dispatch(setActivePage(activePage - 1));
+	};
 
 	return (
-		<div onClick={() => setActivePage(activePage - 1)} className={styles.button}>
+		<div onClick={activePageHandler} className={styles.button}>
 			{'<'}
 		</div>
 	);
