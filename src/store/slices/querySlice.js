@@ -32,6 +32,11 @@ export const querySlice = createSlice({
 		setPagesCount: (state, action) => {
 			state.pagesCount = Math.ceil(action.payload / state.limit);
 		},
+		setQuery: (state, action) => {
+			state.activePage = Number(action.payload.activePage);
+			state.categoryIndex = Number(action.payload.categoryIndex);
+			state.activeSort = action.payload.sort;
+		},
 	},
 });
 
@@ -42,5 +47,6 @@ export const {
 	setValue,
 	setActivePage,
 	setPagesCount,
+	setQuery,
 } = querySlice.actions;
 export default querySlice.reducer;
