@@ -2,27 +2,24 @@ import Categories from '../components/Categories';
 import Sort from '../components/Sort';
 import { Skeleton } from '../components/PizzaBlock/Skeleton';
 import PizzaBlock from '../components/PizzaBlock';
-import { createContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Pagination from '../components/Pagination';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
-
-export const PaginationContext = createContext({});
+import { setPizzas } from '../store/slices/pizzasSlice';
+import { setPagesCount } from '../store/slices/paginationSlice';
 
 export default function Home() {
 	const activeCategory = useSelector(state => state.filter.categoryIndex);
-	const activeSort = useSelector(state => state.sort.activeSort);
-	const [pizzas, setPizzas] = useState([]);
-	const [pizzasCount, setPizzasCount] = useState(0);
+	const { activeSort } = useSelector(state => state.sort);
+	const { activePage } = useSelector(state => state.pagination);
+	const { pizzas } = useSelector(state => state.pizzas);
+	const dispatch = useDispatch();
 	const [isLoading, setIsLoading] = useState(true);
-	const [activePage, setActivePage] = useState(0);
 
 	const searchQuery = useSelector(state => state.search.inputSearchValue);
 
 	const categories = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые'];
-
-	const limit = 4;
-	const pagesCount = Math.ceil(pizzasCount / limit);
 
 	useEffect(() => {
 		setIsLoading(true);
@@ -40,12 +37,12 @@ export default function Home() {
 			)
 			.then(res => {
 				const [allPizzas, count] = res.data;
-				setPizzas(allPizzas);
-				setPizzasCount(count);
+				dispatch(setPizzas(allPizzas));
+				dispatch(setPagesCount(count));
 				setIsLoading(false);
 			});
 		window.scrollTo(0, 0);
-	}, [activeCategory, activeSort, searchQuery, activePage]);
+	}, [activeCategory, activeSort, searchQuery, activePage, dispatch]);
 
 	return (
 		<>
@@ -61,11 +58,7 @@ export default function Home() {
 					? [...Array(6)].map((_, index) => <Skeleton key={index} />)
 					: pizzas.map((obj, index) => <PizzaBlock key={index} {...obj} />)}
 			</div>
-			<PaginationContext.Provider
-				value={{ pizzasCount, pagesCount, activePage, setActivePage }}
-			>
-				<Pagination />
-			</PaginationContext.Provider>
+			<Pagination />
 		</>
 	);
 }
