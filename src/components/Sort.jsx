@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setActiveSort } from '../store/slices/querySlice';
 
@@ -15,6 +15,18 @@ export default function Sort() {
 	const { activeSort } = useSelector(state => state.query);
 	const dispatch = useDispatch();
 	const [open, setOpen] = useState(false);
+	const sortRef = useRef(null);
+
+	useEffect(() => {
+		const handleClickOutside = event => {
+			let path = event.composedPath().includes(sortRef.current);
+			if (!path) setOpen(false);
+		};
+
+		document.body.addEventListener('click', handleClickOutside);
+
+		return () => document.body.removeEventListener('click', handleClickOutside);
+	}, []);
 
 	const selectTypeSort = object => {
 		dispatch(setActiveSort(object));
@@ -22,7 +34,7 @@ export default function Sort() {
 	};
 
 	return (
-		<div className="sort">
+		<div ref={sortRef} className="sort">
 			<div className="sort__label">
 				<svg
 					width="10"
