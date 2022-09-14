@@ -1,16 +1,19 @@
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 export default function CartBottom() {
+	const { cartItems, totalPrice } = useSelector(state => state.cart);
+
 	return (
 		<div className="cart__bottom">
 			<div className="cart__bottom-details">
 				<span className="details-quantity">
 					{' '}
-					Всего пицц: <b>3 шт.</b>{' '}
+					Всего пицц: <b>{cartItems.length} шт.</b>{' '}
 				</span>
 				<span>
 					{' '}
-					Сумма заказа: <b>900 ₽</b>{' '}
+					Сумма заказа: <b>{totalPrice} ₽</b>{' '}
 				</span>
 			</div>
 			<div className="cart__bottom-buttons">
