@@ -7,6 +7,7 @@ import Pagination from '../components/Pagination';
 import { useDispatch, useSelector } from 'react-redux';
 import { setPizzas } from '../store/slices/pizzasSlice';
 import { setPagesCount, setQuery } from '../store/slices/querySlice';
+import { setCart } from '../store/slices/cartSlice';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import qs from 'qs';
@@ -67,6 +68,12 @@ export default function Home() {
 		if (!isQueryParams.current) fetchPizzas();
 		isQueryParams.current = false;
 	}, [categoryIndex, activeSort, inputSearchValue, activePage, dispatch]);
+
+	useEffect(() => {
+		axios.get(`http://localhost:9000/api/cart`).then(res => {
+			dispatch(setCart(res.data));
+		});
+	}, [dispatch]);
 
 	useEffect(() => {
 		if (isAppFirstRender.current) {

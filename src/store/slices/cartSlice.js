@@ -8,8 +8,13 @@ const initialState = {
 export const cartSlice = createSlice({
 	name: 'cart',
 	initialState,
-	reducers: {},
+	reducers: {
+		setCart: (state, action) => {
+			state.cartItems = action.payload;
+			console.log(state.cartItems);
+		},
+	},
 });
 
-export const {} = cartSlice.actions;
+export const { setCart } = cartSlice.actions;
 export default cartSlice.reducer;
