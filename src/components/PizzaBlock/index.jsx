@@ -1,8 +1,31 @@
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addItem } from '../../store/slices/cartSlice';
+import axios from 'axios';
 
-export default function PizzaBlock({ title, price, src, sizes, types }) {
+export default function PizzaBlock({ id, title, price, src, sizes, types }) {
 	const [activeSize, setActiveSize] = useState(0);
 	const [activeType, setActiveType] = useState(0);
+	const cartItem = useSelector(state => state.cart.cartItems.find(obj => obj.pizzaId === id));
+	const dispatch = useDispatch();
+
+	console.log(cartItem);
+
+	const typeNames = ['тонкое', 'традиционное'];
+
+	const addItemHandler = async () => {
+		const item = {
+			pizzaId: id,
+			title,
+			price,
+			src,
+			size: sizes[activeSize],
+			type: typeNames[activeType],
+		};
+
+		dispatch(addItem(item));
+		await axios.post('http://localhost:9000/api/cart', item);
+	};
 
 	return (
 		<div className="pizza-block__wrapper">
@@ -48,7 +71,7 @@ export default function PizzaBlock({ title, price, src, sizes, types }) {
 								fill="white"
 							/>
 						</svg>
-						<span>Добавить</span>
+						<span onClick={addItemHandler}>Добавить</span>
 						<i>0</i>
 					</div>
 				</div>

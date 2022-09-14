@@ -7,10 +7,10 @@ import Pagination from '../components/Pagination';
 import { useDispatch, useSelector } from 'react-redux';
 import { setPizzas } from '../store/slices/pizzasSlice';
 import { setPagesCount, setQuery } from '../store/slices/querySlice';
-import { setCart } from '../store/slices/cartSlice';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import qs from 'qs';
+import { setCart } from '../store/slices/cartSlice';
 
 export default function Home() {
 	const { categoryIndex, activeSort, inputSearchValue, activePage } = useSelector(
@@ -25,7 +25,7 @@ export default function Home() {
 
 	const categories = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые'];
 
-	const fetchPizzas = () => {
+	const fetchPizzasAndCart = () => {
 		setIsLoading(true);
 
 		const category = categoryIndex ? 'category=' + categoryIndex : '';
@@ -45,6 +45,9 @@ export default function Home() {
 				dispatch(setPagesCount(count));
 				setIsLoading(false);
 			});
+		axios.get(`http://localhost:9000/api/cart`).then(res => {
+			dispatch(setCart(res.data));
+		});
 	};
 
 	useEffect(() => {
@@ -65,15 +68,9 @@ export default function Home() {
 	useEffect(() => {
 		window.scrollTo(0, 0);
 
-		if (!isQueryParams.current) fetchPizzas();
+		if (!isQueryParams.current) fetchPizzasAndCart();
 		isQueryParams.current = false;
 	}, [categoryIndex, activeSort, inputSearchValue, activePage, dispatch]);
-
-	useEffect(() => {
-		axios.get(`http://localhost:9000/api/cart`).then(res => {
-			dispatch(setCart(res.data));
-		});
-	}, [dispatch]);
 
 	useEffect(() => {
 		if (isAppFirstRender.current) {

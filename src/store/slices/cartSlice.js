@@ -11,10 +11,12 @@ export const cartSlice = createSlice({
 	reducers: {
 		setCart: (state, action) => {
 			state.cartItems = action.payload;
-			console.log(state.cartItems);
+		},
+		addItem: (state, action) => {
+			state.totalPrice = state.totalPrice + action.payload.price;
 		},
 	},
 });
 
-export const { setCart } = cartSlice.actions;
+export const { setCart, addItem } = cartSlice.actions;
 export default cartSlice.reducer;
