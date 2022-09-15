@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setPizzas } from '../store/slices/pizzasSlice';
 import { setPagesCount, setQuery } from '../store/slices/querySlice';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../axios';
 import qs from 'qs';
 import { setCart } from '../store/slices/cartSlice';
 
@@ -25,28 +25,22 @@ export default function Home() {
 
 	const categories = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые'];
 
-	const fetchPizzasAndCart = () => {
+	const fetchPizzas = () => {
 		setIsLoading(true);
 
 		const category = categoryIndex ? 'category=' + categoryIndex : '';
 		const sortBy = activeSort.sortBy.replace('DESC', '');
 		const order = activeSort.sortBy.includes('DESC') ? 'DESC' : 'ASC';
 		const search = inputSearchValue ? `search=${inputSearchValue}` : '';
+		const allParams = `page=${
+			activePage + 1
+		}&${category}&sortBy=${sortBy}&order=${order}&${search}`;
 
-		axios
-			.get(
-				`http://localhost:9000/api/pizza?page=${
-					activePage + 1
-				}&${category}&sortBy=${sortBy}&order=${order}&${search}`,
-			)
-			.then(res => {
-				const [allPizzas, count] = res.data;
-				dispatch(setPizzas(allPizzas));
-				dispatch(setPagesCount(count));
-				setIsLoading(false);
-			});
-		axios.get(`http://localhost:9000/api/cart`).then(res => {
-			dispatch(setCart(res.data));
+		axios.get(`/pizza?${allParams}`).then(res => {
+			const [allPizzas, count] = res.data;
+			dispatch(setPizzas(allPizzas));
+			dispatch(setPagesCount(count));
+			setIsLoading(false);
 		});
 	};
 
@@ -68,7 +62,7 @@ export default function Home() {
 	useEffect(() => {
 		window.scrollTo(0, 0);
 
-		if (!isQueryParams.current) fetchPizzasAndCart();
+		if (!isQueryParams.current) fetchPizzas();
 		isQueryParams.current = false;
 	}, [categoryIndex, activeSort, inputSearchValue, activePage, dispatch]);
 
@@ -87,6 +81,12 @@ export default function Home() {
 		}
 		isAppFirstRender.current = true;
 	}, [categoryIndex, activeSort, activePage, navigate]);
+
+	useEffect(() => {
+		axios.get(`/cart`).then(res => {
+			dispatch(setCart(res.data));
+		});
+	}, [dispatch]);
 
 	return (
 		<>

@@ -1,15 +1,13 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addItem } from '../../store/slices/cartSlice';
-import axios from 'axios';
+import { setCart } from '../../store/slices/cartSlice';
+import axios from '../../axios';
 
 export default function PizzaBlock({ id, title, price, src, sizes, types }) {
 	const [activeSize, setActiveSize] = useState(0);
 	const [activeType, setActiveType] = useState(0);
-	const cartItem = useSelector(state => state.cart.cartItems.find(obj => obj.pizzaId === id));
+	const { cartItems } = useSelector(state => state.cart);
 	const dispatch = useDispatch();
-
-	console.log(cartItem);
 
 	const typeNames = ['тонкое', 'традиционное'];
 
@@ -23,8 +21,17 @@ export default function PizzaBlock({ id, title, price, src, sizes, types }) {
 			type: typeNames[activeType],
 		};
 
-		dispatch(addItem(item));
-		await axios.post('http://localhost:9000/api/cart', item);
+		const cartItem = cartItems.find(
+			obj => obj.pizzaId === item.pizzaId && obj.size === item.size && obj.type === item.type,
+		);
+
+		const { data } = cartItem
+			? await axios.patch('/cart', item)
+			: await axios.post('/cart', item);
+
+		await axios.get(`/cart`).then(res => {
+			dispatch(setCart(res.data));
+		});
 	};
 
 	return (
@@ -40,7 +47,7 @@ export default function PizzaBlock({ id, title, price, src, sizes, types }) {
 								key={index}
 								className={activeType === index ? 'active' : ''}
 							>
-								{type ? 'традиционное' : 'тонкое'}
+								{index ? 'традиционное' : 'тонкое'}
 							</li>
 						))}
 					</ul>
@@ -72,7 +79,7 @@ export default function PizzaBlock({ id, title, price, src, sizes, types }) {
 							/>
 						</svg>
 						<span onClick={addItemHandler}>Добавить</span>
-						<i>0</i>
+						{/*{addedCount > 0 && <i>{addedCount}</i>}*/}
 					</div>
 				</div>
 			</div>

@@ -2,14 +2,14 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 export default function CartBottom() {
-	const { cartItems, totalPrice } = useSelector(state => state.cart);
+	const { totalPrice, totalCount } = useSelector(state => state.cart);
 
 	return (
 		<div className="cart__bottom">
 			<div className="cart__bottom-details">
 				<span className="details-quantity">
 					{' '}
-					Всего пицц: <b>{cartItems.length} шт.</b>{' '}
+					Всего пицц: <b>{totalCount} шт.</b>{' '}
 				</span>
 				<span>
 					{' '}
